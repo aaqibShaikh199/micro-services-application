@@ -12,6 +12,14 @@ Five Deployments, one namespace. Each Deployment is a body part. The head servic
 
 Everything lands in the `robot` namespace. Images are `robot-legs:1.0.0`, `robot-hands:1.0.0`, `robot-stomach:1.0.0`, `robot-eyes:1.0.0`, and `robot-head:1.0.0`, with `imagePullPolicy: IfNotPresent`.
 
+All five services up. The reference robot stays green, and the live robot matches it.
+
+![All services healthy](screenshots/healthy.png)
+
+Legs Deployment removed. Both feet on the live robot switch to the down colors, and the line under it reads `LEG SERVICE IS DOWN`. The reference robot and the other four parts stay healthy.
+
+![Legs service down](screenshots/legs-down.png)
+
 ## 1. Build the images
 
 From `robot-microservices`:
@@ -22,16 +30,7 @@ From `robot-microservices`:
 
 That loads the five images for the machine you are on. The Dockerfiles are `node:22-alpine` with no native addons, so the same build runs on Apple Silicon and on Intel or AMD Ubuntu.
 
-On a cluster that cannot see your local Docker images, push them and point the manifests at the registry:
-
-```bash
-REGISTRY=123456789012.dkr.ecr.us-east-1.amazonaws.com PUSH=1 ./scripts/build-multiarch.sh
-./scripts/set-ecr-registry.sh 123456789012.dkr.ecr.us-east-1.amazonaws.com
-```
-
-`PUSH=1` builds `linux/amd64` and `linux/arm64`. When the registry host ends in `amazonaws.com`, the script logs in and creates the ECR repositories. `set-ecr-registry.sh` rewrites each `image:` line and sets `imagePullPolicy: Always`.
-
-For kind, load the local tags instead of pushing:
+For kind, load the local tags:
 
 ```bash
 kind load docker-image \
@@ -122,4 +121,4 @@ kubectl apply -f platform/argocd/applications.yaml
 
 `robot-legs`, `robot-hands`, `robot-stomach`, `robot-eyes`, and `robot-head` sync on their own into the `robot` namespace. `robot-istio` and `robot-monitoring` are in the same file and do not auto-sync. Leave them alone unless that cluster already has the Istio and Prometheus CRDs.
 
-The pods still need to pull the images from step 1. Commit the registry image names before Argo syncs, or load the images onto the nodes.
+The pods still need the images from step 1. Load them onto the nodes before Argo syncs.
