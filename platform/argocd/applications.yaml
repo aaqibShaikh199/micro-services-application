@@ -1,0 +1,140 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: robot-legs
+  namespace: argocd
+spec:
+  project: robot
+  source:
+    repoURL: https://github.com/REPLACE_ORG/robot-microservices.git
+    targetRevision: HEAD
+    path: one
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: robot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: robot-hands
+  namespace: argocd
+spec:
+  project: robot
+  source:
+    repoURL: https://github.com/REPLACE_ORG/robot-microservices.git
+    targetRevision: HEAD
+    path: two
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: robot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: robot-stomach
+  namespace: argocd
+spec:
+  project: robot
+  source:
+    repoURL: https://github.com/REPLACE_ORG/robot-microservices.git
+    targetRevision: HEAD
+    path: three
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: robot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: robot-eyes
+  namespace: argocd
+spec:
+  project: robot
+  source:
+    repoURL: https://github.com/REPLACE_ORG/robot-microservices.git
+    targetRevision: HEAD
+    path: four
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: robot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: robot-head
+  namespace: argocd
+spec:
+  project: robot
+  source:
+    repoURL: https://github.com/REPLACE_ORG/robot-microservices.git
+    targetRevision: HEAD
+    path: five
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: robot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: robot-istio
+  namespace: argocd
+spec:
+  project: robot
+  source:
+    repoURL: https://github.com/REPLACE_ORG/robot-microservices.git
+    targetRevision: HEAD
+    path: platform/istio
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: robot
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: robot-monitoring
+  namespace: argocd
+spec:
+  project: robot
+  source:
+    repoURL: https://github.com/REPLACE_ORG/robot-microservices.git
+    targetRevision: HEAD
+    path: platform/monitoring
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: robot
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: legs
+  namespace: robot
+  labels:
+    app.kubernetes.io/name: legs
+    app.kubernetes.io/part-of: robot
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: legs.robot.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: legs
+                port:
+                  number: 3001

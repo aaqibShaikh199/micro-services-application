@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stomach
+  namespace: robot
+  labels:
+    app.kubernetes.io/name: stomach
+    app.kubernetes.io/part-of: robot
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: stomach.robot.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: stomach
+                port:
+                  number: 3003

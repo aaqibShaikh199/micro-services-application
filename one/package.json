@@ -1,0 +1,17 @@
+{
+  "name": "robot-legs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Legs microservice. Both legs, one deployable process.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "prom-client": "^15.1.3"
+  }
+}

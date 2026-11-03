@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: robot
+  namespace: argocd
+spec:
+  description: Robot microservices lab
+  sourceRepos:
+    - "*"
+  destinations:
+    - namespace: robot
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Robot Lab</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect fill='%230E1A24' width='16' height='16'/%3E%3Ccircle cx='8' cy='8' r='4' fill='%234ADE80'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&amp;display=swap" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body data-service="hands">
+  <div class="shell">
+    <header>
+      <div>
+        <p class="brand">Robot Lab</p>
+        <p class="brand-sub" id="served-by">Service health</p>
+      </div>
+      <p class="pill" id="pill" data-state="down">Checking</p>
+    </header>
+    <main class="compare">
+      <section class="card" aria-label="Original healthy robot">
+        <p class="eyebrow">Reference</p>
+        <h1>Original / Healthy Robot</h1>
+        <p class="lede">Every part is green when its microservice is up.</p>
+        <div id="healthy-slot" class="slot"></div>
+      </section>
+      <section class="card" aria-label="Live robot">
+        <p class="eyebrow">Kubernetes</p>
+        <h1>Live Robot</h1>
+        <p class="lede">Each body part follows the health of its own service.</p>
+        <div id="live-slot" class="slot"></div>
+        <div id="alerts" class="alerts" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+  <template id="robot-template">
+    <div class="live">
+      <svg width="320" height="360" viewBox="0 0 320 360" role="img" aria-label="Robot looking happy. All services are healthy.">
+        <ellipse class="shadow" cx="160" cy="340" rx="78" ry="10" fill="#000000" opacity="0.45"></ellipse>
+        <g data-wobble class="steady">
+          <g class="bob">
+            <g class="ant">
+              <path data-stroke="head" d="M160 60 C 160 42, 168 34, 172 24" fill="none" stroke="#4ADE80" stroke-width="4" stroke-linecap="round"></path>
+              <circle data-ink="head" cx="173" cy="20" r="11" fill="#4ADE80"></circle>
+              <circle cx="169" cy="16" r="3.5" fill="#FFFFFF" opacity="0.8"></circle>
+            </g>
+            <rect data-fill="legs" data-stroke="legs" x="116" y="284" width="38" height="44" rx="19" fill="#E4F9EC" stroke="#4ADE80" stroke-width="3"></rect>
+            <rect data-fill="legs" data-stroke="legs" x="166" y="284" width="38" height="44" rx="19" fill="#E4F9EC" stroke="#4ADE80" stroke-width="3"></rect>
+            <ellipse data-shade="legs" cx="135" cy="320" rx="13" ry="5" fill="#C2EED3"></ellipse>
+            <ellipse data-shade="legs" cx="185" cy="320" rx="13" ry="5" fill="#C2EED3"></ellipse>
+            <rect data-fill="armL" data-stroke="armL" x="74" y="210" width="30" height="54" rx="15" transform="rotate(22 89 218)" fill="#E4F9EC" stroke="#4ADE80" stroke-width="3"></rect>
+            <g class="wave">
+              <rect data-fill="armR" data-stroke="armR" x="216" y="210" width="30" height="54" rx="15" transform="rotate(-150 231 220)" fill="#E4F9EC" stroke="#4ADE80" stroke-width="3"></rect>
+            </g>
+            <rect data-fill="core" data-stroke="core" x="102" y="194" width="116" height="104" rx="50" fill="#E4F9EC" stroke="#4ADE80" stroke-width="3"></rect>
+            <ellipse data-shade="core" cx="160" cy="250" rx="34" ry="30" fill="#C2EED3"></ellipse>
+            <path class="pulse" data-ink="core" d="M160 266 C 146 256 138 248 138 240 C 138 233 144 228 150 228 C 155 228 158 231 160 234 C 162 231 165 228 170 228 C 176 228 182 233 182 240 C 182 248 174 256 160 266 Z" fill="#4ADE80"></path>
+            <circle data-shade="head" data-stroke="head" cx="54" cy="136" r="18" fill="#C2EED3" stroke="#4ADE80" stroke-width="3"></circle>
+            <circle data-shade="head" data-stroke="head" cx="266" cy="136" r="18" fill="#C2EED3" stroke="#4ADE80" stroke-width="3"></circle>
+            <rect data-fill="head" data-stroke="head" x="56" y="56" width="208" height="158" rx="74" fill="#E4F9EC" stroke="#4ADE80" stroke-width="3"></rect>
+            <ellipse cx="98" cy="86" rx="20" ry="9" transform="rotate(-24 98 86)" fill="#FFFFFF" opacity="0.7"></ellipse>
+            <rect x="82" y="92" width="156" height="94" rx="42" fill="#0E1A24"></rect>
+            <ellipse cx="100" cy="166" rx="13" ry="7" fill="#FF8FA3" opacity="0.6"></ellipse>
+            <ellipse cx="220" cy="166" rx="13" ry="7" fill="#FF8FA3" opacity="0.6"></ellipse>
+            <g data-face="happy">
+              <g class="blink">
+                <ellipse cx="128" cy="134" rx="15" ry="18" fill="#7CF0A8"></ellipse>
+                <ellipse cx="192" cy="134" rx="15" ry="18" fill="#7CF0A8"></ellipse>
+                <circle cx="133" cy="127" r="5.5" fill="#FFFFFF"></circle>
+                <circle cx="197" cy="127" r="5.5" fill="#FFFFFF"></circle>
+                <circle cx="123" cy="143" r="2.5" fill="#FFFFFF"></circle>
+                <circle cx="187" cy="143" r="2.5" fill="#FFFFFF"></circle>
+              </g>
+              <path d="M148 162 Q154 170 160 162 Q166 170 172 162" fill="none" stroke="#7CF0A8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+            <g data-face="worried" style="display:none">
+              <path d="M112 112 L138 118" stroke="#FFD37A" stroke-width="3.5" stroke-linecap="round"></path>
+              <path d="M208 112 L182 118" stroke="#FFD37A" stroke-width="3.5" stroke-linecap="round"></path>
+              <g class="blink">
+                <ellipse cx="128" cy="138" rx="11" ry="13" fill="#FFD37A"></ellipse>
+                <ellipse cx="192" cy="138" rx="11" ry="13" fill="#FFD37A"></ellipse>
+                <circle cx="132" cy="133" r="4" fill="#FFFFFF"></circle>
+                <circle cx="196" cy="133" r="4" fill="#FFFFFF"></circle>
+              </g>
+              <path d="M146 166 Q153 160 160 166 Q167 172 174 166" fill="none" stroke="#FFD37A" stroke-width="3.5" stroke-linecap="round"></path>
+            </g>
+            <g data-face="sad" style="display:none">
+              <path d="M116 126 L136 136 L116 146" fill="none" stroke="#FF9E94" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M204 126 L184 136 L204 146" fill="none" stroke="#FF9E94" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M146 170 Q160 158 174 170" fill="none" stroke="#FF9E94" stroke-width="3.5" stroke-linecap="round"></path>
+              <path d="M110 152 C 106 160, 106 166, 110 168 C 114 166, 114 160, 110 152 Z" fill="#8FD3FF"></path>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </template>
+  <script src="/script.js"></script>
+</body>
+</html>

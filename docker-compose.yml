@@ -1,0 +1,133 @@
+name: robot-lab
+
+services:
+  stomach:
+    build: ./three
+    image: robot-stomach:1.0.0
+    environment:
+      PORT: "3003"
+      ROBOT_TRACK: v1
+      LEGS_URL: http://legs:3001
+      HANDS_URL: http://hands:3002
+      STOMACH_URL: http://stomach:3003
+      EYES_URL: http://eyes:3004
+      HEAD_URL: http://head:3005
+      PUBLIC_LEGS_URL: http://localhost:3001
+      PUBLIC_HANDS_URL: http://localhost:3002
+      PUBLIC_STOMACH_URL: http://localhost:3003
+      PUBLIC_EYES_URL: http://localhost:3004
+      PUBLIC_HEAD_URL: http://localhost:3005
+    ports:
+      - "3003:3003"
+    init: true
+    healthcheck: &health
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:'+process.env.PORT+'/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 8s
+
+  legs:
+    build: ./one
+    image: robot-legs:1.0.0
+    environment:
+      PORT: "3001"
+      ROBOT_TRACK: v1
+      REQUIRE_ENERGY: "true"
+      STOMACH_URL: http://stomach:3003
+      LEGS_URL: http://legs:3001
+      HANDS_URL: http://hands:3002
+      EYES_URL: http://eyes:3004
+      HEAD_URL: http://head:3005
+      PUBLIC_LEGS_URL: http://localhost:3001
+      PUBLIC_HANDS_URL: http://localhost:3002
+      PUBLIC_STOMACH_URL: http://localhost:3003
+      PUBLIC_EYES_URL: http://localhost:3004
+      PUBLIC_HEAD_URL: http://localhost:3005
+    ports:
+      - "3001:3001"
+    init: true
+    depends_on:
+      stomach:
+        condition: service_healthy
+    healthcheck: *health
+
+  hands:
+    build: ./two
+    image: robot-hands:1.0.0
+    environment:
+      PORT: "3002"
+      ROBOT_TRACK: v1
+      REQUIRE_ENERGY: "true"
+      STOMACH_URL: http://stomach:3003
+      LEGS_URL: http://legs:3001
+      HANDS_URL: http://hands:3002
+      EYES_URL: http://eyes:3004
+      HEAD_URL: http://head:3005
+      PUBLIC_LEGS_URL: http://localhost:3001
+      PUBLIC_HANDS_URL: http://localhost:3002
+      PUBLIC_STOMACH_URL: http://localhost:3003
+      PUBLIC_EYES_URL: http://localhost:3004
+      PUBLIC_HEAD_URL: http://localhost:3005
+    ports:
+      - "3002:3002"
+    init: true
+    depends_on:
+      stomach:
+        condition: service_healthy
+    healthcheck: *health
+
+  eyes:
+    build: ./four
+    image: robot-eyes:1.0.0
+    environment:
+      PORT: "3004"
+      ROBOT_TRACK: v1
+      REQUIRE_ENERGY: "true"
+      STOMACH_URL: http://stomach:3003
+      HEAD_URL: http://head:3005
+      LEGS_URL: http://legs:3001
+      HANDS_URL: http://hands:3002
+      EYES_URL: http://eyes:3004
+      PUBLIC_LEGS_URL: http://localhost:3001
+      PUBLIC_HANDS_URL: http://localhost:3002
+      PUBLIC_STOMACH_URL: http://localhost:3003
+      PUBLIC_EYES_URL: http://localhost:3004
+      PUBLIC_HEAD_URL: http://localhost:3005
+    ports:
+      - "3004:3004"
+    init: true
+    depends_on:
+      stomach:
+        condition: service_healthy
+    healthcheck: *health
+
+  head:
+    build: ./five
+    image: robot-head:1.0.0
+    environment:
+      PORT: "3005"
+      ROBOT_TRACK: v1
+      LEGS_URL: http://legs:3001
+      HANDS_URL: http://hands:3002
+      STOMACH_URL: http://stomach:3003
+      EYES_URL: http://eyes:3004
+      HEAD_URL: http://head:3005
+      PUBLIC_LEGS_URL: http://localhost:3001
+      PUBLIC_HANDS_URL: http://localhost:3002
+      PUBLIC_STOMACH_URL: http://localhost:3003
+      PUBLIC_EYES_URL: http://localhost:3004
+      PUBLIC_HEAD_URL: http://localhost:3005
+    ports:
+      - "3005:3005"
+    init: true
+    depends_on:
+      legs:
+        condition: service_healthy
+      hands:
+        condition: service_healthy
+      stomach:
+        condition: service_healthy
+      eyes:
+        condition: service_healthy
+    healthcheck: *health

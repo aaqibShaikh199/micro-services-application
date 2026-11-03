@@ -1,0 +1,41 @@
+# Delays POST /api/scan by 5 seconds.
+# This replaces the eyes VirtualService. Restore it with:
+#   kubectl apply -k platform/istio
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: eyes
+  namespace: robot
+spec:
+  hosts:
+    - eyes.robot.local
+    - eyes
+    - eyes.robot.svc.cluster.local
+  gateways:
+    - robot-gateway
+    - mesh
+  http:
+    - name: slow-scans
+      match:
+        - method:
+            exact: POST
+          uri:
+            prefix: /api/scan
+      fault:
+        delay:
+          percentage:
+            value: 100
+          fixedDelay: 5s
+      timeout: 8s
+      route:
+        - destination:
+            host: eyes.robot.svc.cluster.local
+            port:
+              number: 3004
+    - name: other
+      timeout: 3s
+      route:
+        - destination:
+            host: eyes.robot.svc.cluster.local
+            port:
+              number: 3004

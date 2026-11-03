@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hands
+  namespace: robot
+  labels:
+    app.kubernetes.io/name: hands
+    app.kubernetes.io/part-of: robot
+    robot.lab/scrape: "true"
+spec:
+  selector:
+    app.kubernetes.io/name: hands
+  ports:
+    - name: http
+      port: 3002
+      targetPort: http

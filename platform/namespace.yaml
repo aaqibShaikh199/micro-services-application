@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: robot
+  labels:
+    app.kubernetes.io/part-of: robot
+    istio-injection: enabled

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hands
+  namespace: robot
+  labels:
+    app.kubernetes.io/name: hands
+    app.kubernetes.io/part-of: robot
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: hands.robot.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hands
+                port:
+                  number: 3002

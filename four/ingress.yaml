@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eyes
+  namespace: robot
+  labels:
+    app.kubernetes.io/name: eyes
+    app.kubernetes.io/part-of: robot
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: eyes.robot.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: eyes
+                port:
+                  number: 3004

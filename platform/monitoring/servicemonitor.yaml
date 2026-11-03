@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: robot
+  namespace: robot
+  labels:
+    release: kube-prometheus-stack
+    app.kubernetes.io/part-of: robot
+spec:
+  selector:
+    matchLabels:
+      robot.lab/scrape: "true"
+  namespaceSelector:
+    matchNames:
+      - robot
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+      scheme: http

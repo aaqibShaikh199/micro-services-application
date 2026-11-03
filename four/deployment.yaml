@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eyes
+  namespace: robot
+  labels:
+    app.kubernetes.io/name: eyes
+    app.kubernetes.io/part-of: robot
+    app.kubernetes.io/version: "1.0.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: eyes
+      version: v1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: eyes
+        app.kubernetes.io/part-of: robot
+        app.kubernetes.io/version: "1.0.0"
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "3004"
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: eyes
+          image: robot-eyes:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3004
+          env:
+            - name: PORT
+              value: "3004"
+            - name: ROBOT_TRACK
+              value: "v1"
+            - name: REQUIRE_ENERGY
+              value: "true"
+            - name: STOMACH_URL
+              value: "http://stomach:3003"
+            - name: HEAD_URL
+              value: "http://head:3005"
+            - name: LEGS_URL
+              value: "http://legs:3001"
+            - name: HANDS_URL
+              value: "http://hands:3002"
+            - name: EYES_URL
+              value: "http://eyes:3004"
+            - name: PUBLIC_LEGS_URL
+              value: "http://legs.robot.local"
+            - name: PUBLIC_HANDS_URL
+              value: "http://hands.robot.local"
+            - name: PUBLIC_STOMACH_URL
+              value: "http://stomach.robot.local"
+            - name: PUBLIC_EYES_URL
+              value: "http://eyes.robot.local"
+            - name: PUBLIC_HEAD_URL
+              value: "http://head.robot.local"
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eyes
+  namespace: robot
+  labels:
+    app.kubernetes.io/name: eyes
+    app.kubernetes.io/part-of: robot
+    robot.lab/scrape: "true"
+spec:
+  selector:
+    app.kubernetes.io/name: eyes
+  ports:
+    - name: http
+      port: 3004
+      targetPort: http

@@ -1,0 +1,184 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: legs
+  namespace: robot
+spec:
+  hosts:
+    - legs.robot.local
+    - legs
+    - legs.robot.svc.cluster.local
+  gateways:
+    - robot-gateway
+    - mesh
+  http:
+    - name: safe-retries
+      match:
+        - method:
+            exact: GET
+      timeout: 5s
+      retries:
+        attempts: 3
+        perTryTimeout: 2s
+        retryOn: gateway-error,connect-failure,refused-stream
+      route:
+        - destination:
+            host: legs.robot.svc.cluster.local
+            port:
+              number: 3001
+    - name: mutations
+      timeout: 3s
+      route:
+        - destination:
+            host: legs.robot.svc.cluster.local
+            port:
+              number: 3001
+
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: hands
+  namespace: robot
+spec:
+  hosts:
+    - hands.robot.local
+    - hands
+    - hands.robot.svc.cluster.local
+  gateways:
+    - robot-gateway
+    - mesh
+  http:
+    - name: safe-retries
+      match:
+        - method:
+            exact: GET
+      timeout: 5s
+      retries:
+        attempts: 3
+        perTryTimeout: 2s
+        retryOn: gateway-error,connect-failure,refused-stream
+      route:
+        - destination:
+            host: hands.robot.svc.cluster.local
+            port:
+              number: 3002
+    - name: mutations
+      timeout: 3s
+      route:
+        - destination:
+            host: hands.robot.svc.cluster.local
+            port:
+              number: 3002
+
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: stomach
+  namespace: robot
+spec:
+  hosts:
+    - stomach.robot.local
+    - stomach
+    - stomach.robot.svc.cluster.local
+  gateways:
+    - robot-gateway
+    - mesh
+  http:
+    - name: safe-retries
+      match:
+        - method:
+            exact: GET
+      timeout: 5s
+      retries:
+        attempts: 3
+        perTryTimeout: 2s
+        retryOn: gateway-error,connect-failure,refused-stream
+      route:
+        - destination:
+            host: stomach.robot.svc.cluster.local
+            port:
+              number: 3003
+    - name: mutations
+      timeout: 3s
+      route:
+        - destination:
+            host: stomach.robot.svc.cluster.local
+            port:
+              number: 3003
+
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: eyes
+  namespace: robot
+spec:
+  hosts:
+    - eyes.robot.local
+    - eyes
+    - eyes.robot.svc.cluster.local
+  gateways:
+    - robot-gateway
+    - mesh
+  http:
+    - name: safe-retries
+      match:
+        - method:
+            exact: GET
+      timeout: 5s
+      retries:
+        attempts: 3
+        perTryTimeout: 2s
+        retryOn: gateway-error,connect-failure,refused-stream
+      route:
+        - destination:
+            host: eyes.robot.svc.cluster.local
+            port:
+              number: 3004
+    - name: mutations
+      timeout: 3s
+      route:
+        - destination:
+            host: eyes.robot.svc.cluster.local
+            port:
+              number: 3004
+
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: head
+  namespace: robot
+spec:
+  hosts:
+    - head.robot.local
+    - head
+    - head.robot.svc.cluster.local
+  gateways:
+    - robot-gateway
+    - mesh
+  http:
+    - name: safe-retries
+      match:
+        - method:
+            exact: GET
+      timeout: 5s
+      retries:
+        attempts: 3
+        perTryTimeout: 2s
+        retryOn: gateway-error,connect-failure,refused-stream
+      route:
+        - destination:
+            host: head.robot.svc.cluster.local
+            port:
+              number: 3005
+    - name: mutations
+      timeout: 3s
+      route:
+        - destination:
+            host: head.robot.svc.cluster.local
+            port:
+              number: 3005
+

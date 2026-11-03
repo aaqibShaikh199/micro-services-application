@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: robot
+  namespace: robot
+  labels:
+    release: kube-prometheus-stack
+    app.kubernetes.io/part-of: robot
+spec:
+  groups:
+    - name: robot.rules
+      rules:
+        - alert: RobotDiamondCritical
+          expr: robot_energy_level < 15
+          for: 30s
+          labels:
+            severity: warning
+          annotations:
+            summary: Magical diamond energy is critical
+            description: The stomach service is reporting energy below 15.
+        - alert: RobotServiceMissing
+          expr: count(count by (service) (robot_build_info)) < 5
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Fewer than five robot services are reporting metrics
+            description: Expected robot_build_info from legs, hands, stomach, eyes, and head.

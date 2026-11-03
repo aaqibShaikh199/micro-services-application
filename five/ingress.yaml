@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: head
+  namespace: robot
+  labels:
+    app.kubernetes.io/name: head
+    app.kubernetes.io/part-of: robot
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: head.robot.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: head
+                port:
+                  number: 3005

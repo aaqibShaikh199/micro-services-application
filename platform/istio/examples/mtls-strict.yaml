@@ -1,0 +1,10 @@
+# Replace the permissive policy after every robot pod has an Istio sidecar.
+# Re-apply platform/istio/mtls.yaml to go back.
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: robot
+spec:
+  mtls:
+    mode: STRICT

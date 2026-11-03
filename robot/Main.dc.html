@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Live Robot</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#4ADE80}a:hover{color:#86EFAC}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes shadow{0%,100%{transform:scaleX(1);opacity:.45}50%{transform:scaleX(.85);opacity:.3}}
+@keyframes wave{0%,100%{transform:rotate(0deg)}25%{transform:rotate(-28deg)}50%{transform:rotate(4deg)}75%{transform:rotate(-22deg)}}
+@keyframes ant{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes wobble{0%,100%{transform:rotate(0deg)}25%{transform:rotate(-2.5deg)}75%{transform:rotate(2.5deg)}}
+.live .bob{animation:bob 2.8s ease-in-out infinite}
+.live .wobbly{animation:wobble 1.6s ease-in-out infinite;transform-box:view-box;transform-origin:160px 330px}
+.live .shadow{animation:shadow 2.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.live .wave{animation:wave 2.6s ease-in-out infinite;transform-box:view-box;transform-origin:232px 222px}
+.live .ant{animation:ant 1.8s ease-in-out infinite;transform-box:view-box;transform-origin:160px 58px}
+.live .blink{animation:blink 4.5s infinite;transform-box:fill-box;transform-origin:center}
+.live .pulse{animation:pulse 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.chip{transition:background .15s ease, transform .15s ease}
+.chip:hover{background:#18293A}
+.chip:active{transform:scale(.96)}
+.chip:focus-visible{outline:2px solid #4ADE80;outline-offset:2px}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="width: 520px; height: 800px; box-sizing: border-box; padding: 28px; background: #0E1A24; border: 1px solid #1F3040; border-radius: 24px; font-family: 'Nunito', ui-rounded, system-ui, sans-serif; color: #EEF5F8; display: flex; flex-direction: column; gap: 8px">
+  <div style="display: flex; flex-direction: column; gap: 6px">
+    <p style="margin: 0; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; color: #4ADE80">KUBERNETES</p>
+    <h1 style="margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -0.01em; color: #FFFFFF">Live Robot</h1>
+    <p style="margin: 0; font-size: 15px; color: #A9BBC8">Each body part follows the health of its own service. Tap a part to try it.</p>
+  </div>
+
+  <div style="display: flex; justify-content: center; padding-top: 8px">
+    <svg width="320" height="360" viewBox="0 0 320 360" role="img" aria-label="{{ariaLabel}}">
+      <ellipse class="shadow" cx="160" cy="340" rx="78" ry="10" fill="#000000" opacity="0.45"></ellipse>
+      <g class="{{wobbleClass}}">
+      <g class="bob">
+        <!-- antenna -->
+        <g class="ant">
+          <path d="M160 60 C 160 42, 168 34, 172 24" fill="none" stroke="{{head.stroke}}" stroke-width="4" stroke-linecap="round"></path>
+          <circle cx="173" cy="20" r="11" fill="{{head.stroke}}"></circle>
+          <circle cx="169" cy="16" r="3.5" fill="#FFFFFF" opacity="0.8"></circle>
+        </g>
+
+        <!-- feet -->
+        <rect x="116" y="284" width="38" height="44" rx="19" fill="{{legs.fill}}" stroke="{{legs.stroke}}" stroke-width="3"></rect>
+        <rect x="166" y="284" width="38" height="44" rx="19" fill="{{legs.fill}}" stroke="{{legs.stroke}}" stroke-width="3"></rect>
+        <ellipse cx="135" cy="320" rx="13" ry="5" fill="{{legs.shade}}"></ellipse>
+        <ellipse cx="185" cy="320" rx="13" ry="5" fill="{{legs.shade}}"></ellipse>
+
+        <!-- left arm (resting) -->
+        <rect x="74" y="210" width="30" height="54" rx="15" transform="rotate(22 89 218)" fill="{{armL.fill}}" stroke="{{armL.stroke}}" stroke-width="3"></rect>
+        <!-- right arm (waving) -->
+        <g class="wave">
+          <rect x="216" y="210" width="30" height="54" rx="15" transform="rotate(-150 231 220)" fill="{{armR.fill}}" stroke="{{armR.stroke}}" stroke-width="3"></rect>
+        </g>
+
+        <!-- belly / core -->
+        <rect x="102" y="194" width="116" height="104" rx="50" fill="{{core.fill}}" stroke="{{core.stroke}}" stroke-width="3"></rect>
+        <ellipse cx="160" cy="250" rx="34" ry="30" fill="{{core.shade}}"></ellipse>
+        <path class="pulse" d="M160 266 C 146 256 138 248 138 240 C 138 233 144 228 150 228 C 155 228 158 231 160 234 C 162 231 165 228 170 228 C 176 228 182 233 182 240 C 182 248 174 256 160 266 Z" fill="{{core.stroke}}"></path>
+
+        <!-- ears -->
+        <circle cx="54" cy="136" r="18" fill="{{head.shade}}" stroke="{{head.stroke}}" stroke-width="3"></circle>
+        <circle cx="266" cy="136" r="18" fill="{{head.shade}}" stroke="{{head.stroke}}" stroke-width="3"></circle>
+
+        <!-- head -->
+        <rect x="56" y="56" width="208" height="158" rx="74" fill="{{head.fill}}" stroke="{{head.stroke}}" stroke-width="3"></rect>
+        <ellipse cx="98" cy="86" rx="20" ry="9" transform="rotate(-24 98 86)" fill="#FFFFFF" opacity="0.7"></ellipse>
+
+        <!-- face screen -->
+        <rect x="82" y="92" width="156" height="94" rx="42" fill="#0E1A24"></rect>
+
+        <!-- cheeks -->
+        <ellipse cx="100" cy="166" rx="13" ry="7" fill="#FF8FA3" opacity="0.6"></ellipse>
+        <ellipse cx="220" cy="166" rx="13" ry="7" fill="#FF8FA3" opacity="0.6"></ellipse>
+
+        <sc-if value="{{happy}}" hint-placeholder-val="{{ true }}">
+          <g class="blink">
+            <ellipse cx="128" cy="134" rx="15" ry="18" fill="#7CF0A8"></ellipse>
+            <ellipse cx="192" cy="134" rx="15" ry="18" fill="#7CF0A8"></ellipse>
+            <circle cx="133" cy="127" r="5.5" fill="#FFFFFF"></circle>
+            <circle cx="197" cy="127" r="5.5" fill="#FFFFFF"></circle>
+            <circle cx="123" cy="143" r="2.5" fill="#FFFFFF"></circle>
+            <circle cx="187" cy="143" r="2.5" fill="#FFFFFF"></circle>
+          </g>
+          <path d="M148 162 Q154 170 160 162 Q166 170 172 162" fill="none" stroke="#7CF0A8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </sc-if>
+
+        <sc-if value="{{worried}}" hint-placeholder-val="{{ false }}">
+          <path d="M112 112 L138 118" stroke="#FFD37A" stroke-width="3.5" stroke-linecap="round"></path>
+          <path d="M208 112 L182 118" stroke="#FFD37A" stroke-width="3.5" stroke-linecap="round"></path>
+          <g class="blink">
+            <ellipse cx="128" cy="138" rx="11" ry="13" fill="#FFD37A"></ellipse>
+            <ellipse cx="192" cy="138" rx="11" ry="13" fill="#FFD37A"></ellipse>
+            <circle cx="132" cy="133" r="4" fill="#FFFFFF"></circle>
+            <circle cx="196" cy="133" r="4" fill="#FFFFFF"></circle>
+          </g>
+          <path d="M146 166 Q153 160 160 166 Q167 172 174 166" fill="none" stroke="#FFD37A" stroke-width="3.5" stroke-linecap="round"></path>
+        </sc-if>
+
+        <sc-if value="{{sad}}" hint-placeholder-val="{{ false }}">
+          <path d="M116 126 L136 136 L116 146" fill="none" stroke="#FF9E94" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M204 126 L184 136 L204 146" fill="none" stroke="#FF9E94" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M146 170 Q160 158 174 170" fill="none" stroke="#FF9E94" stroke-width="3.5" stroke-linecap="round"></path>
+          <path d="M110 152 C 106 160, 106 166, 110 168 C 114 166, 114 160, 110 152 Z" fill="#8FD3FF"></path>
+        </sc-if>
+      </g>
+      </g>
+    </svg>
+  </div>
+
+  <p style="margin: 0; text-align: center; font-size: 14px; font-weight: 900; letter-spacing: 0.12em; color: {{statusColor}}">{{statusText}}</p>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding-top: 14px">
+    <sc-for list="{{parts}}" as="item" hint-placeholder-count="5">
+      <button class="chip" type="button" onClick="{{item.pick}}" aria-label="{{item.aria}}" style="min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid {{item.stroke}}; background: #132331; color: #EEF5F8; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer">
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: {{item.stroke}}"></span>
+        <span>{{item.label}}</span>
+        <span style="font-weight: 600; color: #A9BBC8">{{item.stateLabel}}</span>
+      </button>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"animate":{"editor":"boolean","default":true},"$preview":{"width":520,"height":800}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { s: { head: 'healthy', core: 'healthy', armL: 'healthy', armR: 'healthy', legs: 'healthy' } };
+  }
+  renderVals() {
+    var PAL = {
+      healthy: { fill: '#E4F9EC', shade: '#C2EED3', stroke: '#4ADE80', label: 'Healthy' },
+      degraded: { fill: '#FFF1CF', shade: '#F9DD94', stroke: '#F5B83D', label: 'Degraded' },
+      down: { fill: '#FFDEDA', shade: '#F7B5AE', stroke: '#FF7A6E', label: 'Down' }
+    };
+    var NEXT = { healthy: 'degraded', degraded: 'down', down: 'healthy' };
+    var DEFS = [
+      { id: 'head', label: 'Head' },
+      { id: 'core', label: 'Core' },
+      { id: 'armL', label: 'Left arm' },
+      { id: 'armR', label: 'Right arm' },
+      { id: 'legs', label: 'Legs' }
+    ];
+    var self = this;
+    var s = this.state.s;
+    var out = {};
+    var deg = 0, down = 0;
+    var parts = DEFS.map(function (d) {
+      var st = s[d.id];
+      if (st === 'degraded') deg++;
+      if (st === 'down') down++;
+      var p = PAL[st];
+      out[d.id] = p;
+      return {
+        label: d.label,
+        stroke: p.stroke,
+        stateLabel: p.label,
+        aria: d.label + ': ' + p.label + '. Tap to change.',
+        pick: function () {
+          var n = Object.assign({}, self.state.s);
+          n[d.id] = NEXT[n[d.id]];
+          self.setState({ s: n });
+        }
+      };
+    });
+    var mood = down ? 'sad' : (deg ? 'worried' : 'happy');
+    var statusText = 'ALL SERVICES ARE HEALTHY';
+    var statusColor = '#4ADE80';
+    if (down) {
+      statusText = down + (down === 1 ? ' SERVICE IS DOWN' : ' SERVICES ARE DOWN');
+      statusColor = '#FF7A6E';
+    } else if (deg) {
+      statusText = deg + (deg === 1 ? ' SERVICE IS DEGRADED' : ' SERVICES ARE DEGRADED');
+      statusColor = '#F5B83D';
+    }
+    var animate = this.props.animate ?? true;
+    return Object.assign(out, {
+      parts: parts,
+      happy: mood === 'happy',
+      worried: mood === 'worried',
+      sad: mood === 'sad',
+      statusText: statusText,
+      statusColor: statusColor,
+      wobbleClass: mood === 'sad' ? 'wobbly' : 'steady',
+      rootClass: animate ? 'live' : 'still',
+      ariaLabel: 'Robot looking ' + mood + '. ' + statusText.toLowerCase()
+    });
+  }
+}
+</script>
+</body>
+</html>
