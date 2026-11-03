@@ -109,16 +109,3 @@ Scale one part without touching the others:
 kubectl -n robot scale deployment/hands --replicas=3
 ```
 
-## 5. Deploy with Argo CD
-
-Point the Applications at your Git repository, then apply the project and the Applications. Argo CD must already be installed, and the Applications are created in the `argocd` namespace.
-
-```bash
-./scripts/set-git-repo.sh https://github.com/you/robot-microservices.git
-kubectl apply -f platform/argocd/project.yaml
-kubectl apply -f platform/argocd/applications.yaml
-```
-
-`robot-legs`, `robot-hands`, `robot-stomach`, `robot-eyes`, and `robot-head` sync on their own into the `robot` namespace. `robot-istio` and `robot-monitoring` are in the same file and do not auto-sync. Leave them alone unless that cluster already has the Istio and Prometheus CRDs.
-
-The pods still need the images from step 1. Load them onto the nodes before Argo syncs.
